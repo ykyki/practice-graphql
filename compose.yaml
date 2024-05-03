@@ -1,0 +1,12 @@
+name: abd_libraries
+
+services:
+  library_user:
+    container_name: lus
+    build:
+      context: ./library_user_service
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./library_user_service/src:/usr/src/app/src
+    ports:
+      - "8081:3000"
