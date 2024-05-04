@@ -1,5 +1,7 @@
 import { type Plugin, createSchema, createYoga } from "graphql-yoga";
-import logger from "./logger";
+import logger from "@src/logger";
+import queryResolvers from "@src/queryResolvers";
+import mutationResolvers from "@src/mutationResolvers";
 
 const useLogger: Plugin = {
     onRequest: ({ request }) => {
@@ -7,14 +9,17 @@ const useLogger: Plugin = {
     },
 };
 
-const typeDefs = `#graphql
-    type Query {
-        greetings: String!
-    }
-`;
+const typeDefs = [
+    await Bun.file("./graphql/type.graphql").text(),
+    await Bun.file("./graphql/query.graphql").text(),
+    await Bun.file("./graphql/mutation.graphql").text(),
+];
 const resolvers = {
     Query: {
-        greetings: () => "Hello, yoga!",
+        ...queryResolvers,
+    },
+    Mutation: {
+        ...mutationResolvers,
     },
 };
 const yoga = createYoga({

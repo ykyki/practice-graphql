@@ -3,9 +3,13 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun run --hot ./src/index.ts"
+    "dev": "bun run --hot ./src/index.ts",
+    "codegen": "graphql-codegen --config codegen.ts"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "5.0.2",
+    "@graphql-codegen/typescript": "4.0.6",
+    "@graphql-codegen/typescript-resolvers": "^4.0.6",
     "@types/bunyan": "^1.8.11",
     "bun-types": "latest"
   },

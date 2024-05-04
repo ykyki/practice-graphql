@@ -1,0 +1,7 @@
+type LibraryUser {
+  id: ID!
+  name: String!
+  email: String
+}
+
+scalar LibraryUserId

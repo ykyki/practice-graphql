@@ -1,0 +1,9 @@
+input AddLibraryUserInput {
+  name: String!
+  email: String
+}
+
+type Mutation {
+  addLibraryUser(input: AddLibraryUserInput!): LibraryUser!
+  deleteLibraryUser(id: LibraryUserId!): Boolean!
+}
