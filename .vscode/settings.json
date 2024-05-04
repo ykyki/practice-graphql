@@ -28,5 +28,9 @@
     "[github-actions-workflow]": {
         "editor.insertSpaces": true,
         "editor.tabSize": 2
+    },
+    "[graphql]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2
     }
 }
