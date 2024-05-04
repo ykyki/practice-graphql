@@ -1,22 +1,36 @@
+import { type Plugin, createSchema, createYoga } from "graphql-yoga";
 import logger from "./logger";
-import { route as routeHealth } from "./route/health";
+
+const useLogger: Plugin = {
+    onRequest: ({ request }) => {
+        logger.info(`Request: ${request.method} ${request.url}`);
+    },
+};
+
+const typeDefs = `#graphql
+    type Query {
+        greetings: String!
+    }
+`;
+const resolvers = {
+    Query: {
+        greetings: () => "Hello, yoga!",
+    },
+};
+const yoga = createYoga({
+    schema: createSchema({
+        typeDefs,
+        resolvers,
+    }),
+    healthCheckEndpoint: "/health",
+    plugins: [useLogger],
+});
+
+logger.info("Starting server...");
 
 Bun.serve({
     port: 3000,
-    fetch(req) {
-        logger.info({ req }, "Request received");
-
-        const url = new URL(req.url);
-
-        if (url.pathname === "/health") {
-            return routeHealth();
-        }
-
-        return new Response(`Not Found (${url.pathname})`, {
-            status: 404,
-            headers: {
-                "Content-Type": "text/plain",
-            },
-        });
-    },
+    fetch: yoga,
 });
+
+logger.info("Server started!");
