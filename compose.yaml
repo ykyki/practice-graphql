@@ -7,6 +7,6 @@ services:
       context: ./library_user_service
       dockerfile: Dockerfile.dev
     volumes:
-      - ./library_user_service/src:/usr/src/app/src
+      - ./library_user_service:/usr/src/app
     ports:
       - "8081:3000"
