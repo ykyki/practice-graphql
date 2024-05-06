@@ -10,3 +10,13 @@ services:
       - ./library_user_service:/usr/src/app
     ports:
       - "8081:3000"
+    depends_on:
+      - redis
+
+  redis:
+    container_name: redis
+    build:
+      context: ./redis
+      dockerfile: Dockerfile.dev
+    ports:
+      - "6379:6379"
