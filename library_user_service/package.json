@@ -19,6 +19,7 @@
   "dependencies": {
     "bunyan": "^1.8.15",
     "graphql": "^16.8.1",
-    "graphql-yoga": "^5.3.0"
+    "graphql-yoga": "^5.3.0",
+    "redis": "^4.6.13"
   }
 }

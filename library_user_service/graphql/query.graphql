@@ -1,5 +1,5 @@
 type Query {
   libraryUser(id: LibraryUserId!): LibraryUser
   libraryUsers: [LibraryUser!]!
-  greeting: String!
+  verifyMutationKey(key: String!): Boolean!
 }

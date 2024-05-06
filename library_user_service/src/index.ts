@@ -1,7 +1,10 @@
-import { type Plugin, createSchema, createYoga } from "graphql-yoga";
 import logger from "@src/logger";
-import queryResolvers from "@src/queryResolvers";
 import mutationResolvers from "@src/mutationResolvers";
+import queryResolvers from "@src/queryResolvers";
+import { redisClient } from "@src/redis";
+import { type Plugin, createSchema, createYoga } from "graphql-yoga";
+
+await redisClient.set("key", "value");
 
 const useLogger: Plugin = {
     onRequest: ({ request }) => {

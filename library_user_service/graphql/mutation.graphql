@@ -6,4 +6,5 @@ input AddLibraryUserInput {
 type Mutation {
   addLibraryUser(input: AddLibraryUserInput!): LibraryUser!
   deleteLibraryUser(id: LibraryUserId!): Boolean!
+  createMutationKey: MutationKey!
 }

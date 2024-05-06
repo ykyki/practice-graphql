@@ -1,5 +1,6 @@
+import mutationRepository from "@src/MutationRepository";
 import libraryUserRepository from "@src/domain/library/user/LibraryUserRepository";
-import type { LibraryUser, MutationResolvers } from "@src/generated/server";
+import type { MutationResolvers } from "@src/generated/server";
 
 const addLibraryUser: MutationResolvers["addLibraryUser"] = (_, args) => {
     return libraryUserRepository.add({
@@ -12,7 +13,16 @@ const deleteLibraryUser: MutationResolvers["deleteLibraryUser"] = (_, args) => {
     return libraryUserRepository.delete(args.id);
 };
 
+const createMutationKey: MutationResolvers["createMutationKey"] = async () => {
+    const key = await mutationRepository.createKey();
+
+    return {
+        value: key,
+    };
+};
+
 export default {
     addLibraryUser,
     deleteLibraryUser,
+    createMutationKey,
 } satisfies MutationResolvers;
