@@ -1,0 +1,3 @@
+projects:
+  library_user_serviec:
+    schema: "./library_user_service/graphql/*.graphql"
