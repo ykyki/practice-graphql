@@ -1,5 +1,5 @@
-import mutationRepository from "@src/MutationRepository";
 import libraryUserRepository from "@src/domain/library/user/LibraryUserRepository";
+import mutationRepository from "@src/domain/mutation/MutationRepository";
 import type { LibraryUser, QueryResolvers } from "@src/generated/server";
 
 const libraryUser: QueryResolvers["libraryUser"] = (_, args) => {

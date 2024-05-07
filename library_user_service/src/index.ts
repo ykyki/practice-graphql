@@ -2,7 +2,9 @@ import logger from "@src/logger";
 import mutationResolvers from "@src/mutationResolvers";
 import queryResolvers from "@src/queryResolvers";
 import { redisClient } from "@src/redis";
+import scalarResolvers from "@src/scalarResolvers";
 import { type Plugin, createSchema, createYoga } from "graphql-yoga";
+import { Resolvers } from "./generated/server";
 
 await redisClient.set("key", "value");
 
@@ -24,7 +26,8 @@ const resolvers = {
     Mutation: {
         ...mutationResolvers,
     },
-};
+    ...scalarResolvers,
+} satisfies Resolvers;
 const yoga = createYoga({
     schema: createSchema({
         typeDefs,

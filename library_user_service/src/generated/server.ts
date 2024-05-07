@@ -15,6 +15,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   LibraryUserId: { input: any; output: any; }
+  MutationKey: { input: any; output: any; }
 };
 
 export type AddLibraryUserInput = {
@@ -32,7 +33,7 @@ export type LibraryUser = {
 export type Mutation = {
   __typename?: 'Mutation';
   addLibraryUser: LibraryUser;
-  createMutationKey: MutationKey;
+  createMutationKey: Scalars['MutationKey']['output'];
   deleteLibraryUser: Scalars['Boolean']['output'];
 };
 
@@ -44,11 +45,6 @@ export type MutationAddLibraryUserArgs = {
 
 export type MutationDeleteLibraryUserArgs = {
   id: Scalars['LibraryUserId']['input'];
-};
-
-export type MutationKey = {
-  __typename?: 'MutationKey';
-  value: Scalars['String']['output'];
 };
 
 export type Query = {
@@ -65,7 +61,7 @@ export type QueryLibraryUserArgs = {
 
 
 export type QueryVerifyMutationKeyArgs = {
-  key: Scalars['String']['input'];
+  key: Scalars['MutationKey']['input'];
 };
 
 
@@ -145,7 +141,7 @@ export type ResolversTypes = {
   LibraryUser: ResolverTypeWrapper<LibraryUser>;
   LibraryUserId: ResolverTypeWrapper<Scalars['LibraryUserId']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
-  MutationKey: ResolverTypeWrapper<MutationKey>;
+  MutationKey: ResolverTypeWrapper<Scalars['MutationKey']['output']>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
 };
@@ -158,7 +154,7 @@ export type ResolversParentTypes = {
   LibraryUser: LibraryUser;
   LibraryUserId: Scalars['LibraryUserId']['output'];
   Mutation: {};
-  MutationKey: MutationKey;
+  MutationKey: Scalars['MutationKey']['output'];
   Query: {};
   String: Scalars['String']['output'];
 };
@@ -180,10 +176,9 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteLibraryUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteLibraryUserArgs, 'id'>>;
 };
 
-export type MutationKeyResolvers<ContextType = any, ParentType extends ResolversParentTypes['MutationKey'] = ResolversParentTypes['MutationKey']> = {
-  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+export interface MutationKeyScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['MutationKey'], any> {
+  name: 'MutationKey';
+}
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   libraryUser?: Resolver<Maybe<ResolversTypes['LibraryUser']>, ParentType, ContextType, RequireFields<QueryLibraryUserArgs, 'id'>>;
@@ -195,7 +190,7 @@ export type Resolvers<ContextType = any> = {
   LibraryUser?: LibraryUserResolvers<ContextType>;
   LibraryUserId?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
-  MutationKey?: MutationKeyResolvers<ContextType>;
+  MutationKey?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
 };
 

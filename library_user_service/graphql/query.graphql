@@ -1,5 +1,5 @@
 type Query {
   libraryUser(id: LibraryUserId!): LibraryUser
   libraryUsers: [LibraryUser!]!
-  verifyMutationKey(key: String!): Boolean!
+  verifyMutationKey(key: MutationKey!): Boolean!
 }

@@ -1,5 +1,5 @@
-import mutationRepository from "@src/MutationRepository";
 import libraryUserRepository from "@src/domain/library/user/LibraryUserRepository";
+import mutationRepository from "@src/domain/mutation/MutationRepository";
 import type { MutationResolvers } from "@src/generated/server";
 
 const addLibraryUser: MutationResolvers["addLibraryUser"] = (_, args) => {
@@ -16,9 +16,7 @@ const deleteLibraryUser: MutationResolvers["deleteLibraryUser"] = (_, args) => {
 const createMutationKey: MutationResolvers["createMutationKey"] = async () => {
     const key = await mutationRepository.createKey();
 
-    return {
-        value: key,
-    };
+    return key;
 };
 
 export default {

@@ -5,7 +5,4 @@ type LibraryUser {
 }
 
 scalar LibraryUserId
-
-type MutationKey {
-  value: String!
-}
+scalar MutationKey
