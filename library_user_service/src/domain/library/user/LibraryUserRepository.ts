@@ -1,12 +1,13 @@
 import type { LibraryUser } from "@src/generated/server";
+import { LibraryUserId } from "./LibraryUserId";
 
 const dummyLibraryUsers: LibraryUser[] = [
     {
-        id: "1",
+        id: LibraryUserId.from(1),
         name: "Alice",
     },
     {
-        id: "2",
+        id: LibraryUserId.from(2),
         name: "Bob",
         email: "abc@example.com",
     },
@@ -19,7 +20,7 @@ class LibraryUserRepository {
         this.users = dummyLibraryUsers;
     }
 
-    async findById(id: string): Promise<LibraryUser | null> {
+    async findById(id: LibraryUserId): Promise<LibraryUser | null> {
         return this.users.find((user) => user.id === id) ?? null;
     }
 
@@ -34,7 +35,7 @@ class LibraryUserRepository {
         name: string;
         email?: string;
     }): Promise<LibraryUser> {
-        const id = String(this.users.length + 1);
+        const id = LibraryUserId.from(this.users.length + 1);
         const user = { id, name, email };
         this.users.push(user);
         return user;

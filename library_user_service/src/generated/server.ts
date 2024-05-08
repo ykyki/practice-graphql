@@ -26,7 +26,7 @@ export type AddLibraryUserInput = {
 export type LibraryUser = {
   __typename?: 'LibraryUser';
   email?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
+  id: Scalars['LibraryUserId']['output'];
   name: Scalars['String']['output'];
 };
 
@@ -137,7 +137,6 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   AddLibraryUserInput: AddLibraryUserInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
-  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   LibraryUser: ResolverTypeWrapper<LibraryUser>;
   LibraryUserId: ResolverTypeWrapper<Scalars['LibraryUserId']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -150,7 +149,6 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   AddLibraryUserInput: AddLibraryUserInput;
   Boolean: Scalars['Boolean']['output'];
-  ID: Scalars['ID']['output'];
   LibraryUser: LibraryUser;
   LibraryUserId: Scalars['LibraryUserId']['output'];
   Mutation: {};
@@ -161,7 +159,7 @@ export type ResolversParentTypes = {
 
 export type LibraryUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['LibraryUser'] = ResolversParentTypes['LibraryUser']> = {
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['LibraryUserId'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
