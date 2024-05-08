@@ -2,7 +2,6 @@ import type { LibraryUserId } from "@src/domain/library/user/LibraryUserId";
 import libraryUserRepository from "@src/domain/library/user/LibraryUserRepository";
 import mutationRepository from "@src/domain/mutation/MutationRepository";
 import type { QueryResolvers } from "@src/generated/server";
-import logger from "@src/logger";
 
 const libraryUser: QueryResolvers["libraryUser"] = async (_, args) => {
     const id = args.id as LibraryUserId;

@@ -54,7 +54,7 @@ export class LibraryUserEntityActive implements IsLibraryUserEntity {
         };
     }
 
-    deactivate(deactivatedAt: Date): LibraryUserEntityInactive {
+    inactivate(deactivatedAt: Date): LibraryUserEntityInactive {
         return new LibraryUserEntityInactive({
             id: this.id,
             name: this.name,

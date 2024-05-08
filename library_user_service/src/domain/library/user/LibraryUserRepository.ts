@@ -2,8 +2,8 @@ import {
     type LibraryUserEntity,
     LibraryUserEntityActive,
     LibraryUserEntityInactive,
-} from "./LibraryUserEntiry";
-import { LibraryUserId } from "./LibraryUserId";
+} from "@src/domain/library/user/LibraryUserEntity";
+import { LibraryUserId } from "@src/domain/library/user/LibraryUserId";
 
 interface LibraryUserRepository {
     findById(id: LibraryUserId): Promise<LibraryUserEntity | null>;
@@ -15,7 +15,7 @@ interface LibraryUserRepository {
         name: string;
         email?: string;
     }): Promise<LibraryUserEntity>;
-    delete(id: LibraryUserId): Promise<boolean>;
+    inactivate(id: LibraryUserId): Promise<boolean>;
 }
 
 class LibraryUserRepositoryImpl implements LibraryUserRepository {
@@ -73,7 +73,7 @@ class LibraryUserRepositoryImpl implements LibraryUserRepository {
         return Promise.resolve(user);
     }
 
-    delete(id: LibraryUserId): Promise<boolean> {
+    inactivate(id: LibraryUserId): Promise<boolean> {
         const index = this.users.findIndex((user) => user.id.equals(id));
         if (index === -1) {
             return Promise.resolve(false);
@@ -85,7 +85,7 @@ class LibraryUserRepositoryImpl implements LibraryUserRepository {
         }
 
         const deactivatedAt = new Date();
-        const inactiveUser = user.deactivate(deactivatedAt);
+        const inactiveUser = user.inactivate(deactivatedAt);
 
         this.users[index] = inactiveUser;
 

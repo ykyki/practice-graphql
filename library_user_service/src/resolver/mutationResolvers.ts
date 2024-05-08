@@ -17,7 +17,7 @@ const deleteLibraryUser: MutationResolvers["deleteLibraryUser"] = async (
     args,
 ) => {
     const id = args.id as LibraryUserId;
-    const result = await libraryUserRepository.delete(id);
+    const result = await libraryUserRepository.inactivate(id);
 
     return result;
 };
