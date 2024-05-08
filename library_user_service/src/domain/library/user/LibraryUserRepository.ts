@@ -37,6 +37,7 @@ class LibraryUserRepositoryImpl implements LibraryUserRepository {
             new LibraryUserEntityInactive({
                 id: LibraryUserId.from(3),
                 name: "Charlie",
+                activatedAt: new Date("2024-03-30T23:45:01"),
                 deactivatedAt: new Date("2024-05-08T12:00:00"),
             }),
         ];

@@ -23,11 +23,32 @@ export type AddLibraryUserInput = {
   name: Scalars['String']['input'];
 };
 
-export type LibraryUser = {
-  __typename?: 'LibraryUser';
+export type IsLibraryUser = {
   email?: Maybe<Scalars['String']['output']>;
   id: Scalars['LibraryUserId']['output'];
   name: Scalars['String']['output'];
+  status: Scalars['String']['output'];
+};
+
+export type LibraryUser = LibraryUserActive | LibraryUserInactive;
+
+export type LibraryUserActive = IsLibraryUser & {
+  __typename?: 'LibraryUserActive';
+  activatedAt: Scalars['String']['output'];
+  email?: Maybe<Scalars['String']['output']>;
+  id: Scalars['LibraryUserId']['output'];
+  name: Scalars['String']['output'];
+  status: Scalars['String']['output'];
+};
+
+export type LibraryUserInactive = IsLibraryUser & {
+  __typename?: 'LibraryUserInactive';
+  activatedAt: Scalars['String']['output'];
+  email?: Maybe<Scalars['String']['output']>;
+  id: Scalars['LibraryUserId']['output'];
+  inactivatedAt: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  status: Scalars['String']['output'];
 };
 
 export type Mutation = {
@@ -131,14 +152,25 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+/** Mapping of union types */
+export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
+  LibraryUser: ( LibraryUserActive ) | ( LibraryUserInactive );
+};
 
+/** Mapping of interface types */
+export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
+  IsLibraryUser: ( LibraryUserActive ) | ( LibraryUserInactive );
+};
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   AddLibraryUserInput: AddLibraryUserInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
-  LibraryUser: ResolverTypeWrapper<LibraryUser>;
+  IsLibraryUser: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['IsLibraryUser']>;
+  LibraryUser: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['LibraryUser']>;
+  LibraryUserActive: ResolverTypeWrapper<LibraryUserActive>;
   LibraryUserId: ResolverTypeWrapper<Scalars['LibraryUserId']['output']>;
+  LibraryUserInactive: ResolverTypeWrapper<LibraryUserInactive>;
   Mutation: ResolverTypeWrapper<{}>;
   MutationKey: ResolverTypeWrapper<Scalars['MutationKey']['output']>;
   Query: ResolverTypeWrapper<{}>;
@@ -149,24 +181,51 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   AddLibraryUserInput: AddLibraryUserInput;
   Boolean: Scalars['Boolean']['output'];
-  LibraryUser: LibraryUser;
+  IsLibraryUser: ResolversInterfaceTypes<ResolversParentTypes>['IsLibraryUser'];
+  LibraryUser: ResolversUnionTypes<ResolversParentTypes>['LibraryUser'];
+  LibraryUserActive: LibraryUserActive;
   LibraryUserId: Scalars['LibraryUserId']['output'];
+  LibraryUserInactive: LibraryUserInactive;
   Mutation: {};
   MutationKey: Scalars['MutationKey']['output'];
   Query: {};
   String: Scalars['String']['output'];
 };
 
-export type LibraryUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['LibraryUser'] = ResolversParentTypes['LibraryUser']> = {
+export type IsLibraryUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['IsLibraryUser'] = ResolversParentTypes['IsLibraryUser']> = {
+  __resolveType: TypeResolveFn<'LibraryUserActive' | 'LibraryUserInactive', ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['LibraryUserId'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+};
+
+export type LibraryUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['LibraryUser'] = ResolversParentTypes['LibraryUser']> = {
+  __resolveType: TypeResolveFn<'LibraryUserActive' | 'LibraryUserInactive', ParentType, ContextType>;
+};
+
+export type LibraryUserActiveResolvers<ContextType = any, ParentType extends ResolversParentTypes['LibraryUserActive'] = ResolversParentTypes['LibraryUserActive']> = {
+  activatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['LibraryUserId'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export interface LibraryUserIdScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['LibraryUserId'], any> {
   name: 'LibraryUserId';
 }
+
+export type LibraryUserInactiveResolvers<ContextType = any, ParentType extends ResolversParentTypes['LibraryUserInactive'] = ResolversParentTypes['LibraryUserInactive']> = {
+  activatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['LibraryUserId'], ParentType, ContextType>;
+  inactivatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addLibraryUser?: Resolver<ResolversTypes['LibraryUser'], ParentType, ContextType, RequireFields<MutationAddLibraryUserArgs, 'input'>>;
@@ -185,8 +244,11 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type Resolvers<ContextType = any> = {
+  IsLibraryUser?: IsLibraryUserResolvers<ContextType>;
   LibraryUser?: LibraryUserResolvers<ContextType>;
+  LibraryUserActive?: LibraryUserActiveResolvers<ContextType>;
   LibraryUserId?: GraphQLScalarType;
+  LibraryUserInactive?: LibraryUserInactiveResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   MutationKey?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;

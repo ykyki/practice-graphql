@@ -1,7 +1,27 @@
-type LibraryUser {
+union LibraryUser = LibraryUserActive | LibraryUserInactive
+
+interface IsLibraryUser {
   id: LibraryUserId!
   name: String!
   email: String
+  status: String!
+}
+
+type LibraryUserActive implements IsLibraryUser {
+  id: LibraryUserId!
+  name: String!
+  email: String
+  status: String!
+  activatedAt: String! # TODO: make this a DateTime
+}
+
+type LibraryUserInactive implements IsLibraryUser {
+  id: LibraryUserId!
+  name: String!
+  email: String
+  status: String!
+  activatedAt: String! # TODO: make this a DateTime
+  inactivatedAt: String! # TODO: make this a DateTime
 }
 
 scalar LibraryUserId

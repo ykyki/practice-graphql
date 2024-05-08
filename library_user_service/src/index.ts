@@ -28,6 +28,17 @@ const resolvers = {
         ...mutationResolvers,
     },
     ...scalarResolvers,
+    LibraryUser: {
+        __resolveType: (obj) => {
+            if (obj.status === "ACTIVE") {
+                return "LibraryUserActive";
+            }
+            if (obj.status === "INACTIVE") {
+                return "LibraryUserInactive";
+            }
+            return null;
+        },
+    },
 } satisfies Resolvers;
 
 const yoga = createYoga({

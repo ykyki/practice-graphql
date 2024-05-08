@@ -1,6 +1,10 @@
 import type { LibraryUserId } from "@src/domain/library/user/LibraryUserId";
 import type { LibraryUserStatus } from "@src/domain/library/user/LibraryUserStatus";
-import type { LibraryUser } from "@src/generated/server";
+import type {
+    LibraryUser,
+    LibraryUserActive,
+    LibraryUserInactive,
+} from "@src/generated/server";
 
 export type LibraryUserEntity =
     | LibraryUserEntityActive
@@ -46,20 +50,23 @@ export class LibraryUserEntityActive implements IsLibraryUserEntity {
         return false;
     }
 
-    toApiValue(): LibraryUser {
+    toApiValue(): LibraryUserActive {
         return {
             id: this.id,
             name: this.name,
             email: this.email,
+            status: this.status,
+            activatedAt: this.activatedAt.toISOString(),
         };
     }
 
-    inactivate(deactivatedAt: Date): LibraryUserEntityInactive {
+    inactivate(inactivatedAt: Date): LibraryUserEntityInactive {
         return new LibraryUserEntityInactive({
             id: this.id,
             name: this.name,
             email: this.email,
-            deactivatedAt,
+            activatedAt: this.activatedAt,
+            deactivatedAt: inactivatedAt,
         });
     }
 }
@@ -69,23 +76,27 @@ export class LibraryUserEntityInactive implements IsLibraryUserEntity {
     status: LibraryUserStatus = "INACTIVE";
     name: string;
     email?: string;
-    deactivatedAt: Date;
+    activatedAt: Date;
+    inactivatedAt: Date;
 
     constructor({
         id,
         name,
         email,
+        activatedAt,
         deactivatedAt,
     }: {
         id: LibraryUserId;
         name: string;
         email?: string;
+        activatedAt: Date;
         deactivatedAt: Date;
     }) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.deactivatedAt = deactivatedAt;
+        this.activatedAt = activatedAt;
+        this.inactivatedAt = deactivatedAt;
     }
 
     IsActive(): this is LibraryUserEntityActive {
@@ -95,11 +106,14 @@ export class LibraryUserEntityInactive implements IsLibraryUserEntity {
         return true;
     }
 
-    toApiValue(): LibraryUser {
+    toApiValue(): LibraryUserInactive {
         return {
             id: this.id,
             name: this.name,
             email: this.email,
+            status: this.status,
+            activatedAt: this.activatedAt.toISOString(),
+            inactivatedAt: this.inactivatedAt.toISOString(),
         };
     }
 }
