@@ -1,6 +1,7 @@
+import type { HasEquals } from "@src/domain/common/HasEquals";
 import type { IsApiValue } from "@src/domain/common/IsApiValue";
 
-export class MutationKey implements IsApiValue {
+export class MutationKey implements IsApiValue, HasEquals {
     private static PREFIX = "muk_";
     private static regex = new RegExp(`^${MutationKey.PREFIX}\\w+$`);
     private readonly value: string;
@@ -35,5 +36,13 @@ export class MutationKey implements IsApiValue {
         }
 
         return new MutationKey(value);
+    }
+
+    equals(other: unknown): boolean {
+        if (!(other instanceof MutationKey)) {
+            return false;
+        }
+
+        return this.value === other.value;
     }
 }

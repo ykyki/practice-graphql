@@ -1,6 +1,7 @@
+import type { HasEquals } from "@src/domain/common/HasEquals";
 import type { IsApiValue } from "@src/domain/common/IsApiValue";
 
-export class LibraryUserId implements IsApiValue {
+export class LibraryUserId implements IsApiValue, HasEquals {
     private static PREFIX = "LUI";
     private static regex = new RegExp(`^${LibraryUserId.PREFIX}\\d{5}$`);
     private value: string;
@@ -37,5 +38,12 @@ export class LibraryUserId implements IsApiValue {
             );
         }
         return new LibraryUserId(value);
+    }
+
+    equals(other: unknown): boolean {
+        if (!(other instanceof LibraryUserId)) {
+            return false;
+        }
+        return this.value === other.value;
     }
 }

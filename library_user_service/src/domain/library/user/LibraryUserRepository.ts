@@ -1,55 +1,98 @@
-import type { LibraryUser } from "@src/generated/server";
+import {
+    type LibraryUserEntity,
+    LibraryUserEntityActive,
+    LibraryUserEntityInactive,
+} from "./LibraryUserEntiry";
 import { LibraryUserId } from "./LibraryUserId";
 
-const dummyLibraryUsers: LibraryUser[] = [
-    {
-        id: LibraryUserId.from(1),
-        name: "Alice",
-    },
-    {
-        id: LibraryUserId.from(2),
-        name: "Bob",
-        email: "abc@example.com",
-    },
-];
-
-class LibraryUserRepository {
-    private users: LibraryUser[];
-
-    constructor() {
-        this.users = dummyLibraryUsers;
-    }
-
-    async findById(id: LibraryUserId): Promise<LibraryUser | null> {
-        return this.users.find((user) => user.id === id) ?? null;
-    }
-
-    async findAll(): Promise<LibraryUser[]> {
-        return this.users;
-    }
-
-    async add({
+interface LibraryUserRepository {
+    findById(id: LibraryUserId): Promise<LibraryUserEntity | null>;
+    findAll(): Promise<LibraryUserEntity[]>;
+    add({
         name,
         email,
     }: {
         name: string;
         email?: string;
-    }): Promise<LibraryUser> {
-        const id = LibraryUserId.from(this.users.length + 1);
-        const user = { id, name, email };
-        this.users.push(user);
-        return user;
+    }): Promise<LibraryUserEntity>;
+    delete(id: LibraryUserId): Promise<boolean>;
+}
+
+class LibraryUserRepositoryImpl implements LibraryUserRepository {
+    private users: LibraryUserEntity[];
+
+    constructor() {
+        this.users = [
+            new LibraryUserEntityActive({
+                id: LibraryUserId.from(1),
+                name: "Alice",
+                activatedAt: new Date(),
+            }),
+            new LibraryUserEntityActive({
+                id: LibraryUserId.from(2),
+                name: "Bob",
+                email: "abc@example.com",
+                activatedAt: new Date("2024-05-04T12:34:56"),
+            }),
+            new LibraryUserEntityInactive({
+                id: LibraryUserId.from(3),
+                name: "Charlie",
+                deactivatedAt: new Date("2024-05-08T12:00:00"),
+            }),
+        ];
     }
 
-    async delete(id: string): Promise<boolean> {
-        const index = this.users.findIndex((user) => user.id === id);
+    findById(id: LibraryUserId): Promise<LibraryUserEntity | null> {
+        const userOption =
+            this.users.find((user) => user.id.equals(id)) ?? null;
+
+        return Promise.resolve(userOption);
+    }
+
+    findAll(): Promise<LibraryUserEntity[]> {
+        return Promise.resolve(this.users);
+    }
+
+    add({
+        name,
+        email,
+    }: {
+        name: string;
+        email?: string | undefined;
+    }): Promise<LibraryUserEntity> {
+        const id = LibraryUserId.from(this.users.length + 1);
+        const user = new LibraryUserEntityActive({
+            id,
+            name,
+            email,
+            activatedAt: new Date(),
+        });
+
+        this.users.push(user);
+
+        return Promise.resolve(user);
+    }
+
+    delete(id: LibraryUserId): Promise<boolean> {
+        const index = this.users.findIndex((user) => user.id.equals(id));
         if (index === -1) {
-            return false;
+            return Promise.resolve(false);
         }
-        this.users.splice(index, 1);
-        return true;
+
+        const user = this.users[index];
+        if (user.IsInactive()) {
+            return Promise.resolve(false);
+        }
+
+        const deactivatedAt = new Date();
+        const inactiveUser = user.deactivate(deactivatedAt);
+
+        this.users[index] = inactiveUser;
+
+        return Promise.resolve(true);
     }
 }
 
-const libraryUserRepository = new LibraryUserRepository();
+const libraryUserRepository: LibraryUserRepository =
+    new LibraryUserRepositoryImpl();
 export default libraryUserRepository;
