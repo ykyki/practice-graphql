@@ -13,7 +13,7 @@ export const MutationKeyScalar = new GraphQLScalarType({
 
     serialize(value: unknown): string {
         if (value instanceof MutationKey) {
-            return value.toString();
+            return value.getApiValue();
         }
         throw new Error("MutationKey must be a MutationKey instance");
     },

@@ -2,6 +2,7 @@ import type { IsApiValue } from "@src/domain/common/IsApiValue";
 
 export class LibraryUserId implements IsApiValue {
     private static PREFIX = "LUI";
+    private static regex = new RegExp(`^${LibraryUserId.PREFIX}\\d{5}$`);
     private value: string;
 
     constructor(value: string) {
@@ -26,8 +27,7 @@ export class LibraryUserId implements IsApiValue {
     }
 
     static match(value: string): boolean {
-        const regex = new RegExp(`^${LibraryUserId.PREFIX}\\d{5}$`);
-        return regex.test(value);
+        return LibraryUserId.regex.test(value);
     }
 
     static parse(value: string): LibraryUserId {
