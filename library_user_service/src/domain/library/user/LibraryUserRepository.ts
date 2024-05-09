@@ -81,7 +81,7 @@ class LibraryUserRepositoryImpl implements LibraryUserRepository {
         }
 
         const user = this.users[index];
-        if (user.IsInactive()) {
+        if (user.isInactive()) {
             return Promise.resolve(false);
         }
 

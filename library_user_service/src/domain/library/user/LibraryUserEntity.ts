@@ -16,8 +16,8 @@ interface IsLibraryUserEntity {
     name: string;
     email?: string;
     toApiValue(): LibraryUser;
-    IsActive(): this is LibraryUserEntityActive;
-    IsInactive(): this is LibraryUserEntityInactive;
+    isActive(): this is LibraryUserEntityActive;
+    isInactive(): this is LibraryUserEntityInactive;
 }
 
 export class LibraryUserEntityActive implements IsLibraryUserEntity {
@@ -43,10 +43,12 @@ export class LibraryUserEntityActive implements IsLibraryUserEntity {
         this.email = email;
         this.activatedAt = activatedAt;
     }
-    IsActive(): this is LibraryUserEntityActive {
+
+    isActive(): this is LibraryUserEntityActive {
         return true;
     }
-    IsInactive(): this is LibraryUserEntityInactive {
+
+    isInactive(): this is LibraryUserEntityInactive {
         return false;
     }
 
@@ -99,10 +101,10 @@ export class LibraryUserEntityInactive implements IsLibraryUserEntity {
         this.inactivatedAt = deactivatedAt;
     }
 
-    IsActive(): this is LibraryUserEntityActive {
+    isActive(): this is LibraryUserEntityActive {
         return false;
     }
-    IsInactive(): this is LibraryUserEntityInactive {
+    isInactive(): this is LibraryUserEntityInactive {
         return true;
     }
 

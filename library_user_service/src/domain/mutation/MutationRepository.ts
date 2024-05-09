@@ -13,7 +13,7 @@ class MutationRepository {
         const i = await redisClient.incr(MUTATION_INCREMENT_KEY);
         const key = MutationKey.from(i.toString());
 
-        await redisClient.set(key.getApiValue(), VERIFY_VALUE, {
+        await redisClient.set(key.toApiValue(), VERIFY_VALUE, {
             EX: MUTATION_KEY_EXPIRATION,
         });
 
@@ -21,7 +21,7 @@ class MutationRepository {
     }
 
     async verifyKey(key: MutationKey): Promise<boolean> {
-        const result = await redisClient.get(key.getApiValue());
+        const result = await redisClient.get(key.toApiValue());
 
         return result === VERIFY_VALUE;
     }

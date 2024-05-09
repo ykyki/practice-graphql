@@ -10,7 +10,7 @@ export class LibraryUserId implements IsApiValue, HasEquals {
         this.value = value;
     }
 
-    getApiValue(): string {
+    toApiValue(): string {
         return this.value;
     }
 

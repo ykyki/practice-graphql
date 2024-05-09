@@ -13,7 +13,7 @@ export const MutationKeyScalar = new GraphQLScalarType({
 
     serialize(value: unknown): string {
         if (value instanceof MutationKey) {
-            return value.getApiValue();
+            return value.toApiValue();
         }
         throw new Error("MutationKey must be a MutationKey instance");
     },
@@ -40,7 +40,7 @@ export const LibraryUserIdScalar = new GraphQLScalarType({
 
     serialize(value: unknown): string {
         if (value instanceof LibraryUserId) {
-            return value.getApiValue();
+            return value.toApiValue();
         }
         throw new Error("LibraryUserId must be a LibraryUserId instance");
     },
@@ -61,6 +61,8 @@ export const LibraryUserIdScalar = new GraphQLScalarType({
 } satisfies LibraryUserIdScalarConfig);
 
 export default {
+    // biome-ignore lint: graphql
     MutationKey: MutationKeyScalar,
+    // biome-ignore lint: graphql
     LibraryUserId: LibraryUserIdScalar,
 };
