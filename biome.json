@@ -13,5 +13,20 @@
         "indentStyle": "space",
         "indentWidth": 4,
         "lineEnding": "lf"
+    },
+    "overrides": [
+        {
+            "include": ["./library_user_service/**"],
+            "linter": {
+                "enabled": true,
+                "rules": {
+                    "all": true
+                }
+            },
+            "formatter": {}
+        }
+    ],
+    "files": {
+        "ignore": ["./library_user_service/src/generated/**"]
     }
 }
