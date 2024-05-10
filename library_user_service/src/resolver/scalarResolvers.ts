@@ -61,8 +61,6 @@ export const LibraryUserIdScalar = new GraphQLScalarType({
 } satisfies LibraryUserIdScalarConfig);
 
 export default {
-    // biome-ignore lint: graphql
     MutationKey: MutationKeyScalar,
-    // biome-ignore lint: graphql
     LibraryUserId: LibraryUserIdScalar,
 };

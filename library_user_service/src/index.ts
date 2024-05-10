@@ -4,6 +4,7 @@ import mutationResolvers from "@src/resolver/mutationResolvers";
 import queryResolvers from "@src/resolver/queryResolvers";
 import scalarResolvers from "@src/resolver/scalarResolvers";
 import { type Plugin, createSchema, createYoga } from "graphql-yoga";
+import { LibraryUserStatus } from "./domain/library/user/LibraryUserStatus";
 import type { Resolvers } from "./generated/server";
 
 await redisClient.set("key", "value");
@@ -30,10 +31,10 @@ const resolvers = {
     ...scalarResolvers,
     LibraryUser: {
         __resolveType: (obj) => {
-            if (obj.status === "ACTIVE") {
+            if (obj.status === LibraryUserStatus.ACTIVE.toApiValue()) {
                 return "LibraryUserActive";
             }
-            if (obj.status === "INACTIVE") {
+            if (obj.status === LibraryUserStatus.INACTIVE.toApiValue()) {
                 return "LibraryUserInactive";
             }
             return null;

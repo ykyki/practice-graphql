@@ -1,5 +1,5 @@
 import type { LibraryUserId } from "@src/domain/library/user/LibraryUserId";
-import type { LibraryUserStatus } from "@src/domain/library/user/LibraryUserStatus";
+import { LibraryUserStatus } from "@src/domain/library/user/LibraryUserStatus";
 import type {
     LibraryUser,
     LibraryUserActive,
@@ -22,7 +22,7 @@ interface IsLibraryUserEntity {
 
 export class LibraryUserEntityActive implements IsLibraryUserEntity {
     id: LibraryUserId;
-    status: LibraryUserStatus = "ACTIVE";
+    status: LibraryUserStatus = LibraryUserStatus.ACTIVE;
     name: string;
     email?: string;
     activatedAt: Date;
@@ -57,7 +57,7 @@ export class LibraryUserEntityActive implements IsLibraryUserEntity {
             id: this.id,
             name: this.name,
             email: this.email,
-            status: this.status,
+            status: this.status.toApiValue(),
             activatedAt: this.activatedAt.toISOString(),
         };
     }
@@ -75,7 +75,7 @@ export class LibraryUserEntityActive implements IsLibraryUserEntity {
 
 export class LibraryUserEntityInactive implements IsLibraryUserEntity {
     id: LibraryUserId;
-    status: LibraryUserStatus = "INACTIVE";
+    status: LibraryUserStatus = LibraryUserStatus.INACTIVE;
     name: string;
     email?: string;
     activatedAt: Date;
@@ -113,7 +113,7 @@ export class LibraryUserEntityInactive implements IsLibraryUserEntity {
             id: this.id,
             name: this.name,
             email: this.email,
-            status: this.status,
+            status: this.status.toApiValue(),
             activatedAt: this.activatedAt.toISOString(),
             inactivatedAt: this.inactivatedAt.toISOString(),
         };
