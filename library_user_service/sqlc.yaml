@@ -11,7 +11,7 @@ sql:
     queries:
       - "./postgres/query/*.sql"
     codegen:
-      - out: "./src/generated/sqlc"
+      - out: "./out/sqlc"
         plugin: ts
         options:
           runtime: node

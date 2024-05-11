@@ -68,7 +68,7 @@ export class LibraryUserEntityActive implements IsLibraryUserEntity {
             name: this.name,
             email: this.email,
             activatedAt: this.activatedAt,
-            deactivatedAt: inactivatedAt,
+            inactivatedAt,
         });
     }
 }
