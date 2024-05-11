@@ -43,12 +43,12 @@ export interface LibraryUserRepositoryDb_findByIdArgs {
 }
 
 export interface LibraryUserRepositoryDb_findByIdRow {
-    libraryUserId: string | null;
+    libraryUserId: string;
     status: string;
     name: string;
     email: string | null;
     activatedTime: Date;
-    inactivatedTime: string | null;
+    inactivatedTime: Date | null;
 }
 
 export async function libraryUserRepositoryDb_findById(client: Client, args: LibraryUserRepositoryDb_findByIdArgs): Promise<LibraryUserRepositoryDb_findByIdRow | null> {
@@ -105,16 +105,7 @@ SELECT
 FROM users
 ORDER BY library_user_id ASC`;
 
-export interface LibraryUserRepositoryDb_findByAllRow {
-    libraryUserId: string | null;
-    status: string;
-    name: string;
-    email: string | null;
-    activatedTime: Date;
-    inactivatedTime: string | null;
-}
-
-export async function libraryUserRepositoryDb_findByAll(client: Client): Promise<LibraryUserRepositoryDb_findByAllRow[]> {
+export async function libraryUserRepositoryDb_findByAll(client: Client): Promise<LibraryUserRepositoryDb_findByIdRow[]> {
     const result = await client.query({
         text: libraryUserRepositoryDb_findByAllQuery,
         values: [],

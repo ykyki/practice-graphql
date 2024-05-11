@@ -5,12 +5,10 @@ import {
 } from "@src/domain/library/user/LibraryUserEntity";
 import { LibraryUserId } from "@src/domain/library/user/LibraryUserId";
 import {
-    type LibraryUserRepositoryDb_findByAllRow,
     type LibraryUserRepositoryDb_findByIdRow,
     libraryUserRepositoryDb_findByAll,
     libraryUserRepositoryDb_findById,
-} from "@src/generated/sqlc/query_sql";
-import logger from "@src/logger";
+} from "@src/generated/sqlc/library_user_query_sql";
 import { postgresDb } from "@src/postgres";
 import { LibraryUserStatus } from "./LibraryUserStatus";
 
@@ -58,7 +56,6 @@ class LibraryUserRepositoryImpl implements LibraryUserRepository {
             substring: id.toApiValue(),
         });
         client.release();
-        logger.info(`findById: ${JSON.stringify(result)}`);
 
         if (result === null) {
             return null;
@@ -118,26 +115,25 @@ class LibraryUserRepositoryImpl implements LibraryUserRepository {
     }
 
     private static fromDbValueToEntity(
-        v:
-            | LibraryUserRepositoryDb_findByAllRow
-            | LibraryUserRepositoryDb_findByIdRow,
+        v: LibraryUserRepositoryDb_findByIdRow,
     ): LibraryUserEntity {
         const status = LibraryUserStatus.fromDbValue(v.status);
         switch (status) {
             case LibraryUserStatus.ACTIVE:
                 return new LibraryUserEntityActive({
-                    id: LibraryUserId.fromDbValue(v.libraryUserId!), // v.id should not be null
+                    id: LibraryUserId.fromDbValue(v.libraryUserId),
                     name: v.name,
                     email: v.email ?? undefined,
                     activatedAt: v.activatedTime,
                 });
             case LibraryUserStatus.INACTIVE:
                 return new LibraryUserEntityInactive({
-                    id: LibraryUserId.fromDbValue(v.libraryUserId!), // v.id should not be null
+                    id: LibraryUserId.fromDbValue(v.libraryUserId),
                     name: v.name,
                     email: v.email ?? undefined,
                     activatedAt: v.activatedTime,
-                    inactivatedAt: v.inactivatedTime!, // v.inactivatedTime should be non-null Date
+                    // biome-ignore lint/style/noNonNullAssertion: inactivatedAt is not null for INACTIVE status
+                    inactivatedAt: v.inactivatedTime!,
                 });
             default:
                 throw new Error(`Invalid LibraryUserStatus: ${status}`);

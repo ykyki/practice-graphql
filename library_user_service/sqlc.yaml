@@ -6,8 +6,10 @@ plugins:
       sha256: 287df8f6cc06377d67ad5ba02c9e0f00c585509881434d15ea8bd9fc751a9368
 sql:
   - engine: "postgresql"
-    queries: "./postgres/query.sql"
-    schema: "./postgres/schema.sql"
+    schema:
+      - "./postgres/schema/*.sql"
+    queries:
+      - "./postgres/query/*.sql"
     codegen:
       - out: "./src/generated/sqlc"
         plugin: ts
