@@ -9,11 +9,50 @@ import { LibraryUserStatus } from "./domain/library/user/LibraryUserStatus";
 import type { Resolvers } from "./generated/server";
 
 const pool = initPostgres();
-const r = await pool.query("SELECT id, username FROM users ORDER BY id DESC");
-console.log("Postgres query result: ", r.rows[0].id);
-console.log("Postgres query result: ", r.rows[0].username);
-console.log("Postgres query result: ", r.rows[1].id);
-console.log("Postgres query result: ", r.rows[1].username);
+const r = await pool.query(
+    String.raw`
+WITH users AS (
+    (
+        SELECT
+            library_user_id
+            , 'active' AS status
+            , name
+            , email
+            , activated_time
+            , NULL AS inactivated_time
+        FROM library_user_active_st
+    )
+    UNION ALL
+    (
+        SELECT
+            library_user_id
+            , 'inactive' AS status
+            , name
+            , email
+            , activated_time
+            , inactivated_time
+        FROM library_user_inactive_st
+    )
+)
+SELECT
+    'LUI' || TO_CHAR(library_user_id, 'FM00000') AS id
+    , name
+    , email
+    , activated_time
+    , inactivated_time
+FROM users
+ORDER BY id ASC;
+;
+        `,
+);
+for (const row of r.rows) {
+    console.log("Postgres query result: ", row.id);
+    console.log("Postgres query result: ", row.status);
+    console.log("Postgres query result: ", row.name);
+    console.log("Postgres query result: ", row.email);
+    console.log("Postgres query result: ", row.activated_time);
+    console.log("Postgres query result: ", row.inactivated_time);
+}
 
 await redisClient.set("key", "value");
 
