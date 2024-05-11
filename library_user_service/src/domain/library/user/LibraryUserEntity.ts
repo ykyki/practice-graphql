@@ -86,19 +86,19 @@ export class LibraryUserEntityInactive implements IsLibraryUserEntity {
         name,
         email,
         activatedAt,
-        deactivatedAt,
+        inactivatedAt,
     }: {
         id: LibraryUserId;
         name: string;
         email?: string;
         activatedAt: Date;
-        deactivatedAt: Date;
+        inactivatedAt: Date;
     }) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.activatedAt = activatedAt;
-        this.inactivatedAt = deactivatedAt;
+        this.inactivatedAt = inactivatedAt;
     }
 
     isActive(): this is LibraryUserEntityActive {

@@ -31,6 +31,10 @@ export class LibraryUserId implements IsApiValue, HasEquals {
         return LibraryUserId.regex.test(value);
     }
 
+    static fromDbValue(s: string) {
+        return new LibraryUserId(s);
+    }
+
     static parse(value: string): LibraryUserId {
         if (!LibraryUserId.match(value)) {
             throw new Error(

@@ -24,4 +24,24 @@ export class LibraryUserStatus implements IsApiValue, HasEquals {
                 return "inactive";
         }
     }
+
+    toDbValue(): string {
+        switch (this.value) {
+            case "ACTIVE":
+                return "active";
+            case "INACTIVE":
+                return "inactive";
+        }
+    }
+
+    static fromDbValue(s: string): LibraryUserStatus {
+        switch (s) {
+            case "active":
+                return LibraryUserStatus.ACTIVE;
+            case "inactive":
+                return LibraryUserStatus.INACTIVE;
+            default:
+                throw new Error(`Invalid LibraryUserStatus: ${s}`);
+        }
+    }
 }

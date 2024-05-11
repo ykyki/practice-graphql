@@ -4,6 +4,15 @@ import {
     LibraryUserEntityInactive,
 } from "@src/domain/library/user/LibraryUserEntity";
 import { LibraryUserId } from "@src/domain/library/user/LibraryUserId";
+import {
+    type LibraryUserRepositoryDb_findByAllRow,
+    type LibraryUserRepositoryDb_findByIdRow,
+    libraryUserRepositoryDb_findByAll,
+    libraryUserRepositoryDb_findById,
+} from "@src/generated/sqlc/query_sql";
+import logger from "@src/logger";
+import { postgresDb } from "@src/postgres";
+import { LibraryUserStatus } from "./LibraryUserStatus";
 
 interface LibraryUserRepository {
     findById(id: LibraryUserId): Promise<LibraryUserEntity | null>;
@@ -38,20 +47,35 @@ class LibraryUserRepositoryImpl implements LibraryUserRepository {
                 id: LibraryUserId.from(3),
                 name: "Charlie",
                 activatedAt: new Date("2024-03-30T23:45:01"),
-                deactivatedAt: new Date("2024-05-08T12:00:00"),
+                inactivatedAt: new Date("2024-05-08T12:00:00"),
             }),
         ];
     }
 
-    findById(id: LibraryUserId): Promise<LibraryUserEntity | null> {
-        const userOption =
-            this.users.find((user) => user.id.equals(id)) ?? null;
+    async findById(id: LibraryUserId): Promise<LibraryUserEntity | null> {
+        const client = await postgresDb.pool.connect();
+        const result = await libraryUserRepositoryDb_findById(client, {
+            substring: id.toApiValue(),
+        });
+        client.release();
+        logger.info(`findById: ${JSON.stringify(result)}`);
 
-        return Promise.resolve(userOption);
+        if (result === null) {
+            return null;
+        }
+        return LibraryUserRepositoryImpl.fromDbValueToEntity(result);
     }
 
-    findAll(): Promise<LibraryUserEntity[]> {
-        return Promise.resolve(this.users);
+    async findAll(): Promise<LibraryUserEntity[]> {
+        const client = await postgresDb.pool.connect();
+        const result = await libraryUserRepositoryDb_findByAll(client);
+        client.release();
+
+        const entities = result.map((v) =>
+            LibraryUserRepositoryImpl.fromDbValueToEntity(v),
+        );
+
+        return entities;
     }
 
     add({
@@ -91,6 +115,33 @@ class LibraryUserRepositoryImpl implements LibraryUserRepository {
         this.users[index] = inactiveUser;
 
         return Promise.resolve(true);
+    }
+
+    private static fromDbValueToEntity(
+        v:
+            | LibraryUserRepositoryDb_findByAllRow
+            | LibraryUserRepositoryDb_findByIdRow,
+    ): LibraryUserEntity {
+        const status = LibraryUserStatus.fromDbValue(v.status);
+        switch (status) {
+            case LibraryUserStatus.ACTIVE:
+                return new LibraryUserEntityActive({
+                    id: LibraryUserId.fromDbValue(v.libraryUserId!), // v.id should not be null
+                    name: v.name,
+                    email: v.email ?? undefined,
+                    activatedAt: v.activatedTime,
+                });
+            case LibraryUserStatus.INACTIVE:
+                return new LibraryUserEntityInactive({
+                    id: LibraryUserId.fromDbValue(v.libraryUserId!), // v.id should not be null
+                    name: v.name,
+                    email: v.email ?? undefined,
+                    activatedAt: v.activatedTime,
+                    inactivatedAt: v.inactivatedTime!, // v.inactivatedTime should be non-null Date
+                });
+            default:
+                throw new Error(`Invalid LibraryUserStatus: ${status}`);
+        }
     }
 }
 
