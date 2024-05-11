@@ -1,4 +1,5 @@
 import logger from "@src/logger";
+import { initPostgres } from "@src/postgres";
 import { redisClient } from "@src/redis";
 import mutationResolvers from "@src/resolver/mutationResolvers";
 import queryResolvers from "@src/resolver/queryResolvers";
@@ -6,6 +7,13 @@ import scalarResolvers from "@src/resolver/scalarResolvers";
 import { type Plugin, createSchema, createYoga } from "graphql-yoga";
 import { LibraryUserStatus } from "./domain/library/user/LibraryUserStatus";
 import type { Resolvers } from "./generated/server";
+
+const pool = initPostgres();
+const r = await pool.query("SELECT id, username FROM users ORDER BY id DESC");
+console.log("Postgres query result: ", r.rows[0].id);
+console.log("Postgres query result: ", r.rows[0].username);
+console.log("Postgres query result: ", r.rows[1].id);
+console.log("Postgres query result: ", r.rows[1].username);
 
 await redisClient.set("key", "value");
 
