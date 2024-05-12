@@ -2,9 +2,10 @@ FROM oven/bun:1 as base
 WORKDIR /usr/src/app
 
 FROM base as dev
-COPY ./package.json ./package.json
-COPY ./bun.lockb ./bun.lockb
-RUN bun install --frozen-lockfile
+RUN mkdir /tmp/dev
+COPY ./package.json /tmp/dev
+COPY ./bun.lockb /tmp/dev
+RUN cd /tmp/dev && bun install --frozen-lockfile
 
 USER bun
 EXPOSE 3000/tcp

@@ -1,4 +1,10 @@
 FROM golang:1.22-alpine as base
 WORKDIR /usr/src/app
 
+FROM base as dev
+RUN mkdir /tmp/dev
+COPY ./go.mod ./go.sum /tmp/dev/
+RUN cd /tmp/dev && go mod download
+
+EXPOSE 8080/tcp
 CMD [ "go", "run", "./..." ]
