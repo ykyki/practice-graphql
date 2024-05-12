@@ -1,0 +1,4 @@
+FROM golang:1.22-alpine as base
+WORKDIR /usr/src/app
+
+CMD [ "go", "run", "./..." ]
