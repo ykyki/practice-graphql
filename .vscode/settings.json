@@ -33,5 +33,5 @@
         "editor.insertSpaces": true,
         "editor.tabSize": 2
     },
-    "cSpell.words": ["Codegen", "sqlc"]
+    "cSpell.words": ["Codegen", "gqlgen", "labstack", "sqlc", "ykyki"]
 }
