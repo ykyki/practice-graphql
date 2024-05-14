@@ -1,7 +1,7 @@
 name: abd_libraries
 
 services:
-  library_user:
+  library_user_service:
     container_name: lus
     build:
       context: ./library_user_service

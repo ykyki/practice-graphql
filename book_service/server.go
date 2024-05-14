@@ -19,8 +19,9 @@ func init() {
 }
 
 func main() {
-	slog.Info("Starting echo server...")
+	slog.Info("Echo server starting...")
 	e := echo.New()
+
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
