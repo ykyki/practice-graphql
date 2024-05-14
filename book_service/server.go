@@ -8,7 +8,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/ykyki/practice-graphql/book_service/graph"
+	"github.com/ykyki/practice-graphql/book_service/gqlgen"
 )
 
 func init() {
@@ -29,9 +29,9 @@ func main() {
 
 	// graphql
 	graphqlHandler := handler.NewDefaultServer(
-		graph.NewExecutableSchema(
-			graph.Config{
-				Resolvers: &graph.Resolver{},
+		gqlgen.NewExecutableSchema(
+			gqlgen.Config{
+				Resolvers: &gqlgen.Resolver{},
 			},
 		),
 	)

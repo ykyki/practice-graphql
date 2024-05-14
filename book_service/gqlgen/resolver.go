@@ -1,6 +1,6 @@
-package graph
+package gqlgen
 
-import "github.com/ykyki/practice-graphql/book_service/graph/model"
+import "github.com/ykyki/practice-graphql/book_service/gqlgen/model"
 
 // This file will not be regenerated automatically.
 //
