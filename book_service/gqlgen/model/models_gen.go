@@ -2,25 +2,32 @@
 
 package model
 
+type Bibliography struct {
+	ID         string       `json:"id"`
+	Name       string       `json:"name"`
+	Isbn       *string      `json:"ISBN,omitempty"`
+	BookStocks []*BookStock `json:"bookStocks"`
+}
+
+type BookStock struct {
+	ID             string        `json:"id"`
+	Detail         *string       `json:"detail,omitempty"`
+	BibliographyID string        `json:"bibliographyId"`
+	Bibliography   *Bibliography `json:"bibliography"`
+}
+
+type CreateBibliographyInput struct {
+	Name string  `json:"name"`
+	Isbn *string `json:"ISBN,omitempty"`
+}
+
+type CreateBookStockInput struct {
+	Detail         *string `json:"detail,omitempty"`
+	BibliographyID string  `json:"bibliographyId"`
+}
+
 type Mutation struct {
 }
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
-}
-
 type Query struct {
-}
-
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
-}
-
-type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
 }

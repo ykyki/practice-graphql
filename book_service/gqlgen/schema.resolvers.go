@@ -6,29 +6,80 @@ package gqlgen
 
 import (
 	"context"
-	"crypto/rand"
 	"fmt"
-	"math/big"
 
 	"github.com/ykyki/practice-graphql/book_service/gqlgen/model"
 )
 
-// CreateTodo is the resolver for the createTodo field.
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	randNumber, _ := rand.Int(rand.Reader, big.NewInt(100))
-	todo := &model.Todo{
-		Text: input.Text,
-		ID:   fmt.Sprintf("T%d", randNumber),
-		User: &model.User{ID: input.UserID, Name: "user " + input.UserID},
+// BookStocks is the resolver for the bookStocks field.
+func (r *bibliographyResolver) BookStocks(ctx context.Context, obj *model.Bibliography) ([]*model.BookStock, error) {
+	var bookStocks []*model.BookStock
+	for _, bookStock := range r.bookStocks {
+		if bookStock.BibliographyID == obj.ID {
+			bookStocks = append(bookStocks, bookStock)
+		}
 	}
-	r.todos = append(r.todos, todo)
-	return todo, nil
+
+	return bookStocks, nil
 }
 
-// Todos is the resolver for the todos field.
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	return r.todos, nil
+// Bibliography is the resolver for the bibliography field.
+func (r *bookStockResolver) Bibliography(ctx context.Context, obj *model.BookStock) (*model.Bibliography, error) {
+	for _, bibliography := range r.bibliographies {
+		if bibliography.ID == obj.BibliographyID {
+			return bibliography, nil
+		}
+	}
+
+	err := fmt.Errorf("bibliography not found for bookStock: (bookStockId = %s, bibliographyId = %s)", obj.ID, obj.BibliographyID)
+	return nil, err
 }
+
+// CreateBibliography is the resolver for the createBibliography field.
+func (r *mutationResolver) CreateBibliography(ctx context.Context, input *model.CreateBibliographyInput) (*model.Bibliography, error) {
+	id := fmt.Sprintf("BIB%05d", len(r.bibliographies)+1)
+
+	bibliography := &model.Bibliography{
+		ID:   id,
+		Name: input.Name,
+		Isbn: input.Isbn,
+	}
+
+	r.bibliographies = append(r.bibliographies, bibliography)
+
+	return bibliography, nil
+}
+
+// CreateBookStock is the resolver for the createBookStock field.
+func (r *mutationResolver) CreateBookStock(ctx context.Context, input *model.CreateBookStockInput) (*model.BookStock, error) {
+	id := fmt.Sprintf("STK%05d", len(r.bookStocks)+1)
+
+	bookStock := &model.BookStock{
+		ID:             id,
+		Detail:         input.Detail,
+		BibliographyID: input.BibliographyID,
+	}
+
+	r.bookStocks = append(r.bookStocks, bookStock)
+
+	return bookStock, nil
+}
+
+// Bibliographies is the resolver for the bibliographies field.
+func (r *queryResolver) Bibliographies(ctx context.Context) ([]*model.Bibliography, error) {
+	return r.bibliographies, nil
+}
+
+// BookStocks is the resolver for the bookStocks field.
+func (r *queryResolver) BookStocks(ctx context.Context) ([]*model.BookStock, error) {
+	return r.bookStocks, nil
+}
+
+// Bibliography returns BibliographyResolver implementation.
+func (r *Resolver) Bibliography() BibliographyResolver { return &bibliographyResolver{r} }
+
+// BookStock returns BookStockResolver implementation.
+func (r *Resolver) BookStock() BookStockResolver { return &bookStockResolver{r} }
 
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
@@ -36,5 +87,7 @@ func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
+type bibliographyResolver struct{ *Resolver }
+type bookStockResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }

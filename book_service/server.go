@@ -31,7 +31,7 @@ func main() {
 	graphqlHandler := handler.NewDefaultServer(
 		gqlgen.NewExecutableSchema(
 			gqlgen.Config{
-				Resolvers: &gqlgen.Resolver{},
+				Resolvers: gqlgen.NewResolver(),
 			},
 		),
 	)
