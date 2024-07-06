@@ -5,7 +5,7 @@ go 1.21.6
 require (
 	github.com/99designs/gqlgen v0.17.46
 	github.com/labstack/echo/v4 v4.12.0
-	github.com/vektah/gqlparser/v2 v2.5.11
+	github.com/vektah/gqlparser/v2 v2.5.15
 )
 
 require (
